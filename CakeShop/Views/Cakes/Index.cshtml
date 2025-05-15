@@ -1,0 +1,47 @@
+﻿@model IEnumerable<CakeShop.Models.Cake>
+
+@{
+    ViewData["Title"] = "我們的蛋糕";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+@* 可選：新增蛋糕按鈕 (如果要做管理功能) *@
+@* <p>
+    <a asp-action="Create" class="btn btn-primary">新增蛋糕</a>
+</p> *@
+
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+    @* Responsive grid *@
+    @foreach (var item in Model)
+    {
+        <div class="col">
+            <div class="card h-100">
+                <img src="@(item.ImageUrl ?? "/images/placeholder.png")" class="card-img-top" alt="@item.Name" style="height: 200px; object-fit: cover;"> @* 預設圖片和樣式 *@
+                <div class="card-body">
+                    <h5 class="card-title">@Html.DisplayFor(modelItem => item.Name)</h5>
+                    <p class="card-text">@Html.DisplayFor(modelItem => item.Description)</p>
+                    <p class="card-text"><strong>價格: @item.Price.ToString("C")</strong></p> @* 格式化為貨幣 *@
+                </div>
+                <div class="card-footer bg-transparent border-top-0">
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-primary btn-sm">查看詳情</a>
+                    @* 加入購物車按鈕，稍後在 ShoppingCartController 實現邏輯 *@
+                    @if (User.Identity != null && User.Identity.IsAuthenticated) // 檢查是否登入
+                    {
+                        <form asp-controller="ShoppingCart" asp-action="AddToCart" method="post" class="d-inline">
+                            <input type="hidden" name="cakeId" value="@item.Id" />
+                            <input type="hidden" name="quantity" value="1" /> @* 列表頁預設加入1個 *@
+                            <button type="submit" class="btn btn-success btn-sm float-end">加入購物車</button>
+                        </form>
+                    }
+                    else
+                    {
+                        <a asp-area="Identity" asp-page="/Account/Login" asp-route-returnUrl="@Context.Request.Path" class="btn btn-secondary btn-sm float-end">登入後購買</a>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@* 建立一個 wwwroot/images 資料夾並放入圖片，placeholder.png 作為預設圖 *@
