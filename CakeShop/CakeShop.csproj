@@ -9,13 +9,16 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.0.11" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.11" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.11" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="9.0.5" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.11" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.11" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.11" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.7" />
+	<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.11" />
+	<PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.11" />
+	<!-- 修正以下三個 EF Core 套件版本 -->
+	<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.11" />
+	<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.11" />
+	<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.11" />
+	<!-- 其他套件保持不變 -->
+	<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.11" />
+	<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.7" />
+
   </ItemGroup>
 
 </Project>
