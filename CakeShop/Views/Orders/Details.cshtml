@@ -1,0 +1,116 @@
+﻿@model CakeShop.Models.Order
+
+@{
+    ViewData["Title"] = $"訂單詳情 #{Model.Id}";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div>
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Id)
+        </dt>
+        <dd class="col-sm-10">
+            #@Html.DisplayFor(model => model.Id)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.OrderDate)
+        </dt>
+        <dd class="col-sm-10">
+            @Model.OrderDate.ToString("yyyy/MM/dd HH:mm:ss")
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Status)
+        </dt>
+        <dd class="col-sm-10">
+            <span class="badge @GetStatusBadgeClass(Model.Status)">
+                @Html.DisplayFor(model => model.Status)
+            </span>
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.RecipientName)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.RecipientName)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ShippingAddress)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ShippingAddress)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.RecipientPhone)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.RecipientPhone)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.TotalAmount)
+        </dt>
+        <dd class="col-sm-10">
+            <strong>@Model.TotalAmount.ToString("C")</strong>
+        </dd>
+    </dl>
+</div>
+
+<div class="mt-4">
+    <h4>訂購商品</h4>
+    <hr />
+    @if (Model.OrderDetails != null && Model.OrderDetails.Any())
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>商品</th>
+                    <th>圖片</th>
+                    <th class="text-end">單價</th>
+                    <th class="text-center">數量</th>
+                    <th class="text-end">小計</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.OrderDetails)
+                {
+                    <tr>
+                        <td>@item.Cake?.Name</td>
+                        <td>
+                            @if (item.Cake != null)
+                            {
+                                <img src="@(item.Cake.ImageUrl ?? "/images/Apple.jpg")" alt="@item.Cake.Name" style="width: 50px; height: auto;" class="img-thumbnail" />
+                            }
+                        </td>
+                        <td class="text-end">@item.Price.ToString("C")</td>
+                        <td class="text-center">@item.Quantity</td>
+                        <td class="text-end">@((item.Price * item.Quantity).ToString("C"))</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>沒有商品明細</p>
+    }
+</div>
+
+<div class="mt-3">
+    <a asp-action="Index" class="btn btn-outline-secondary">返回我的訂單</a>
+</div>
+
+@functions
+{
+    string GetStatusBadgeClass(OrderStatus status)
+    {
+        return status switch
+        {
+            OrderStatus.Pending => "bg-warning text-dark",
+            OrderStatus.Confirmed => "bg-info text-dark",
+            OrderStatus.Shipped => "bg-primary",
+            OrderStatus.Completed => "bg-success",
+            OrderStatus.Cancelled => "bg-danger",
+            _ => "bg-secondary",
+        };
+    }
+}

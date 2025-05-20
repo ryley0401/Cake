@@ -1,0 +1,45 @@
+﻿@model CakeShop.Models.Order
+
+@{
+	ViewData["Title"] = "訂單完成";
+}
+
+@if (ViewBag.SuccessMessage != null)
+{
+	<div class="alert alert-success" role="alert">
+		@ViewBag.SuccessMessage
+	</div>
+}
+
+<h1>感謝你的訂購</h1>
+<p>訂單已成功建立，詳細資訊如下</p>
+
+<div class="card">
+	<div class="card-header">
+		訂單編號: #@Model.Id - @Model.OrderDate.ToString("yyyy-MM-dd HH:mm")
+	</div>
+	<div class="card-body">
+		<h5 class="card-title">訂單詳情</h5>
+		<p><strong>狀態:</strong> @Html.DisplayFor(Model => Model.Status)</p>
+		<p><strong>收件人:</strong> @Html.DisplayFor(Model => Model.RecipientName)</p>
+		<p><strong>電話:</strong> @Html.DisplayFor(Model => Model.RecipientPhone)</p>
+		<p><strong>地址:</strong> @Html.DisplayFor(Model => Model.ShippingAddress)</p>
+
+		<h6 class="mt-4">訂購商品：</h6>
+		<ul class="list-group list-group-flush">
+			@foreach (var item in Model.OrderDetails)
+			{
+				<li class="list-group-item d-flex justify-content-between align-items-center">
+					<span>@item.Cake?.Name x @item.Quantity</span>
+					<span>@((item.Price * item.Quantity).ToString("C"))</span>
+				</li>
+			}
+		</ul>
+		<p class="text-end mt-2"><strong>訂單總額: @Model.TotalAmount.ToString("C")</strong></p>
+	</div>
+	<div class="card-footer text-muted">
+		<a asp-action="Index" class="btn btn-outline-primary">查看我的訂單</a>
+		<a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary">返回首頁</a>
+	</div>
+</div>
+

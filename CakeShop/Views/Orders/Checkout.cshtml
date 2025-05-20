@@ -1,0 +1,73 @@
+﻿@model CakeShop.Controllers.CheckoutViewModel
+
+@{
+    ViewData["Title"] = "結帳";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div class="row">
+    <div class="col-md-7">
+        <h4>收件資訊</h4>
+        <hr />
+        <form asp-action="PlaceOrder" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="mb-3">
+                <label asp-for="RecipientName" class="form-label"></label>
+                <input asp-for="RecipientName" class="form-control" />
+                <span asp-validation-for="RecipientName" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="ShippingAddress" class="form-label"></label>
+                <input asp-for="ShippingAddress" class="form-control" />
+                <span asp-validation-for="ShippingAddress" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="RecipientPhone" class="form-label"></label>
+                <input asp-for="RecipientPhone" class="form-control" />
+                <span asp-validation-for="RecipientPhone" class="text-danger"></span>
+            </div>
+
+            <div class="d-grid gap-2">
+                @* 讓按鈕變大 *@
+                <button type="submit" class="btn btn-primary btn-lg">確認下單</button>
+            </div>
+        </form>
+    </div>
+    <div class="col-md-5">
+        <h4>訂單摘要</h4>
+        <hr />
+        @if (Model.CartItems.Any())
+        {
+            <ul class="list-group mb-3">
+                @foreach (var item in Model.CartItems)
+                {
+                    <li class="list-group-item d-flex justify-content-between lh-sm">
+                        <div>
+                            <h6 class="my-0">@item.Cake?.Name</h6>
+                            <small class="text-muted">數量: @item.Quantity</small>
+                        </div>
+                        <span class="text-muted">@((item.Cake?.Price ?? 0m * item.Quantity).ToString("C"))</span>
+                    </li>
+                }
+                <li class="list-group-item d-flex justify-content-between bg-light">
+                    <span class="fw-bold">總計(TWD)</span>
+                    <strong>@Model.TotalAmount.ToString("C")</strong>
+                </li>
+            </ul>
+        }
+        else
+        {
+            <p>購物車是空的</p>
+        }
+        <a asp-controller="ShoppingCart" asp-action="Index" class="btn btn-outline-secondary w-100">返回購物車修改</a>
+    </div>
+</div>
+
+@section Scripts
+{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
